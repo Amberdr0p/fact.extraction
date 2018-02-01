@@ -13,11 +13,37 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class ProcessingFile {
+
+	public static void writeToFile(String path, Map<Pair<String, String>, Integer> map) {
+		Writer writer = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, false), "utf-8"));
+			for (Entry<Pair<String, String>, Integer> entry : map.entrySet()) {
+				writer.write(entry.getKey().getLeft() + "\t" + entry.getKey().getRight() + "\t" + entry.getValue() + "\n");
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	public static void writeToFile(String path, Collection<Pair<String, String>> listNE) {
 		Writer writer = null;
@@ -42,7 +68,7 @@ public class ProcessingFile {
 			}
 		}
 	}
-	
+
 	public static void writeToEndFile(String path, List<Pair<String, String>> listNE) {
 		Writer writer = null;
 		try {

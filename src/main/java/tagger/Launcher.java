@@ -8,22 +8,31 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
+import extraction.Test1;
 import utils.ProcessingFile;
 
 public class Launcher {
 
 	private static int SHIFT = 2000;
-
+	private final static Logger logger = LoggerFactory.getLogger(Launcher.class);
+	
 	public static void main(String[] args) throws IOException {
+		String log4j = Launcher.class.getClassLoader().getResource("log4j.properties").getPath();
+        PropertyConfigurator.configure(log4j);
+		
+		
 		Set<Pair<String, String>> setSentTag = new TreeSet<Pair<String, String>>();
 		List<Pair<String, String>> listNETag = new ArrayList<Pair<String, String>>();
 		List<Pair<String, String>> listNE = ProcessingFile.readDictionary("listNE");
 
 		MaxentTagger tagger = new MaxentTagger("C://Users//Ivan//Desktop//NLP//russian-ud-mfmini.tagger");
 
-		for (int i = 0; i < listNE.size(); i++) {
+		for (int i = 818001; i < listNE.size(); i++) {
 			Pair<String, String> lineNE = listNE.get(i);
 
 			// возможно надо поменять, разделитель слов пробел
@@ -51,14 +60,11 @@ public class Launcher {
 			setSentTag.add(new MutablePair<String, String>(resLineOnlyTag.toString(), lineNE.getRight()));
 			listNETag.add(new MutablePair<String, String>(resLineTag.toString(), lineNE.getRight()));
 			// System.out.println(resLine.toString());
-			if (i % 2000 == 0) {
-				ProcessingFile.writeToEndFile("neWithTags.txt", listNETag);
-				listNETag.clear();
-				System.out.println("Processed " + i + " NE");
-			}
+			
 		}
+		ProcessingFile.writeToEndFile("neWithTags2.txt", listNETag);
 
-		ProcessingFile.writeToFile("templatesTagNE.txt", setSentTag);
+		ProcessingFile.writeToFile("templatesTagNE2.txt", setSentTag);
 	}
 
 }
