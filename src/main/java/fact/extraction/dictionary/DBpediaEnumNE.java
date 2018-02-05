@@ -5,11 +5,11 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.DB;
 
 public enum DBpediaEnumNE {
-	THING_OWL("http://nerd.eurecom.fr/ontology#Thing", "Thing"), // 480ê
-	PERSON_DBO("http://nerd.eurecom.fr/ontology#Person", "Person"), // 150ê
-	LOCATION_DBO("http://nerd.eurecom.fr/ontology#Location", "Location"), // 130ê
-	ORGANISATION_DBO("http://nerd.eurecom.fr/ontology#Organisation", "Org"), // 28ê
-	ANIMAL("http://nerd.eurecom.fr/ontology#Animal", "Animal"); // 16ê
+	THING_OWL("http://nerd.eurecom.fr/ontology#Thing", "Thing"), // 480k
+	PERSON_DBO("http://nerd.eurecom.fr/ontology#Person", "Person"), // 150k
+	LOCATION_DBO("http://nerd.eurecom.fr/ontology#Location", "Location"), // 130k
+	ORGANISATION_DBO("http://nerd.eurecom.fr/ontology#Organisation", "Org"), // 28k
+	ANIMAL("http://nerd.eurecom.fr/ontology#Animal", "Animal"); // 16k
 
 	private final String type;
 	private final String strType;

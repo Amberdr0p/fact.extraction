@@ -23,10 +23,6 @@ import utils.ProcessingFile;
 
 public class Test1 {
 
-	// ���� ���� ��� �� thing - �� ����� ���
-	// map <String, List<Pair<String, Integer>> - tags, list<type, count>
-	// ������ ����� ������� tags|words
-
 	private static final Pattern pattern = Pattern.compile("^[А-яЁёA-z0-9]+$"); // ???????
 
 	private final static Logger logger = LoggerFactory.getLogger(Test1.class);
@@ -46,8 +42,6 @@ public class Test1 {
 	}
 
 	private static void test1(Map<String, List<Pair<String, Integer>>> map, MaxentTagger tagger) throws IOException {
-		// ���������� ��������� (.tokens + .objects �����)
-
 		List<File> folders = new ArrayList<File>() {
 			{
 				add(new File("C://Users//Ivan//workspace//dialogue-21//factRuEval-2016//devset"));

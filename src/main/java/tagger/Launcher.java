@@ -20,12 +20,11 @@ public class Launcher {
 
 	private static int SHIFT = 2000;
 	private final static Logger logger = LoggerFactory.getLogger(Launcher.class);
-	
+
 	public static void main(String[] args) throws IOException {
-		String log4j = Launcher.class.getClassLoader().getResource("log4j.properties").getPath();
-        PropertyConfigurator.configure(log4j);
-		
-		
+		// String log4j = Launcher.class.getClassLoader().getResource("log4j.properties").getPath();
+		// PropertyConfigurator.configure(log4j);
+
 		Set<Pair<String, String>> setSentTag = new TreeSet<Pair<String, String>>();
 		List<Pair<String, String>> listNETag = new ArrayList<Pair<String, String>>();
 		List<Pair<String, String>> listNE = ProcessingFile.readDictionary("listNE");
@@ -35,7 +34,6 @@ public class Launcher {
 		for (int i = 818001; i < listNE.size(); i++) {
 			Pair<String, String> lineNE = listNE.get(i);
 
-			// возможно надо поменять, разделитель слов пробел
 			StringBuffer resLineOnlyTag = new StringBuffer();
 			StringBuffer resLineTag = new StringBuffer();
 			String[] tokens = lineNE.getLeft().split(" ");
@@ -47,20 +45,18 @@ public class Launcher {
 					resLineTag.append(" ");
 				}
 				String res = tagger.tagTokenizedString(token);
-				// System.out.println(res);
 				String[] resT = res.split("_");
 				if (resT.length == 2) {
 					resLineOnlyTag.append(resT[1]);
 					resLineTag.append(res);
 				} else {
-					System.out.println("EEEEE " + res);
+					logger.info("Not found tag: " + res);
 				}
 			}
 
 			setSentTag.add(new MutablePair<String, String>(resLineOnlyTag.toString(), lineNE.getRight()));
 			listNETag.add(new MutablePair<String, String>(resLineTag.toString(), lineNE.getRight()));
-			// System.out.println(resLine.toString());
-			
+
 		}
 		ProcessingFile.writeToEndFile("neWithTags2.txt", listNETag);
 

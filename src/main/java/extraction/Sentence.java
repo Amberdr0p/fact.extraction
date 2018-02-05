@@ -12,7 +12,7 @@ public class Sentence {
 	List<String> tags;
 	List<Integer> indexesTags;
 	
-	List<Pair<String, String>> nes = new ArrayList<Pair<String, String>>(); // найденные
+	List<Pair<String, String>> nes = new ArrayList<Pair<String, String>>();
 	
 	public Sentence(List<String> sourceWords, List<String> words, List<Integer> indexesTags) {
 		this.sourceWords = sourceWords;

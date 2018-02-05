@@ -151,11 +151,6 @@ public class DialogNE {
 							containsAll = true;
 							listNE.add(new MutablePair<List<Integer>, String>(spansInd, type));
 							i++;
-							/*
-							 * logger.info("Found !containsAll list: {}, spansInd: {}",
-							 * list.stream().map(Object::toString).collect(Collectors.joining(",")),
-							 * spansInd.stream().map(Object::toString).collect(Collectors.joining(",")));
-							 */
 						}
 					}
 				}
@@ -196,10 +191,6 @@ public class DialogNE {
 
 	private static String getNETokens(List<Integer> spansIndNE, Map<Integer, List<Integer>> mapSpans,
 			Map<Integer, String> tokens, List<Integer> usedTokens) {
-		// String spansIndexNE = str.substring(str.indexOf(" ", str.indexOf(" ") + 1) +
-		// 1, str.indexOf("#") - 1);
-		// String spansIndNE[] = spansIndexNE.split(" ");
-
 		List<Integer> tokensNE = mapSpans.get(Integer.valueOf(spansIndNE.get(0)));
 		for (int i = 1; i < spansIndNE.size(); i++) {
 			List<Integer> list = mapSpans.get(Integer.valueOf(spansIndNE.get(i)));

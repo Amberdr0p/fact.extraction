@@ -12,7 +12,10 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import tagger.Launcher;
 import utils.ProcessingFile;
 import utils.RDFStore;
 
@@ -24,9 +27,11 @@ public class KBNE {
 			+ "?uri <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type.} "
 			+ "ORDER BY ?uri LIMIT ${LIMIT} OFFSET ${OFFSET}";
 	private static final Pattern p = Pattern
-			.compile("^[ΐ-ÿ¨Έ\\d\\s\\.\\,\\-\\\\\\/\\Ή\\'\\’\\!\\+\\&\\—\\«\\»\\\"\\`\\:\\;]*[ΐ-ÿ¨Έ]+"
-					+ "[ΐ-ÿ¨Έ\\d\\s\\.\\,\\-\\\\\\/\\Ή\\'\\’\\!\\+\\&\\—\\«\\»\\\"\\`\\:\\;]*$");
+			.compile("^[Π-ΡΠΡ‘\\d\\s\\.\\,\\-\\\\\\/\\β„–\\'\\β€™\\!\\+\\&\\β€”\\Β«\\Β»\\\"\\`\\:\\;]*[Π-ΡΠΡ‘]+"
+					+ "[Π-ΡΠΡ‘\\d\\s\\.\\,\\-\\\\\\/\\β„–\\'\\β€™\\!\\+\\&\\β€”\\Β«\\Β»\\\"\\`\\:\\;]*$");
 
+	private final static Logger logger = LoggerFactory.getLogger(KBNE.class);
+	
 	private static final String KEY_COUNT = "count";
 	private static final String KEY_URI = "uri";
 	private static final String KEY_LABEL = "label";
@@ -52,19 +57,17 @@ public class KBNE {
 						if (typeE != null) {
 							String type = typeE.getStrType();
 
-							// System.out.print("\r\n" + label);
-
 							Pair<String, String> pair = new MutablePair<String, String>(label, type);
 							if (!listNE.contains(pair)) {
 								listNE.add(pair);
 							}
 						} else {
-							System.out.println("Νε νΰιδεν ςθο δλÿ label: " + label);
+							logger.info("Type for label {} equals null: ", label);
 						}
 					}
 				}
 			}
-			System.out.println(listNE.size());
+			logger.info("Size listNE = {}",listNE.size());
 			ProcessingFile.writeToFile("listNE", listNE);
 		}
 	}
