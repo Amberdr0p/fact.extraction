@@ -25,11 +25,14 @@ public class DialogNE {
 
 	public static void main(String[] args) throws IOException {
 		List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
-		processingDialogSource(list);
+		List<Pair<String, String>> otherTokens = new ArrayList<Pair<String, String>>();
+		processingDialogSource(list, otherTokens);
 		ProcessingFile.writeToFile("listDialogNE.txt", list);
+		ProcessingFile.writeToFile("otherTokens.txt", otherTokens);
 	}
 
-	public static void processingDialogSource(List<Pair<String, String>> listNE) throws IOException {
+	public static void processingDialogSource(List<Pair<String, String>> listNE, List<Pair<String, String>> otherTokens)
+			throws IOException {
 		List<File> folders = new ArrayList<File>() {
 			{
 				add(new File("C://Users//Ivan//workspace//dialogue-21//factRuEval-2016//devset"));
@@ -59,30 +62,29 @@ public class DialogNE {
 			Arrays.sort(filesTokens);
 
 			for (int i = 0; i < filesObjects.length; i++) {
-				processingFile(listNE, filesObjects[i], filesSpans[i], filesTokens[i]);
+				processingFile(listNE, otherTokens, filesObjects[i], filesSpans[i], filesTokens[i]);
 				logger.info("Processing files {}, {}, {} is complete", filesObjects[i].getName(),
 						filesSpans[i].getName(), filesTokens[i].getName());
 			}
 		}
 	}
 
-	private static void processingFile(List<Pair<String, String>> listNE, File filesObjects, File filesSpans,
-			File filesTokens) throws IOException {
+	private static void processingFile(List<Pair<String, String>> listNE, List<Pair<String, String>> otherTokens, File filesObjects,
+			File filesSpans, File filesTokens) throws IOException {
 		List<String> listObjects = ProcessingFile.readFile(filesObjects);
 		List<String> listSpans = ProcessingFile.readFile(filesSpans);
 		List<String> listTokens = ProcessingFile.readFile(filesTokens);
-		processingList(listNE, listObjects, listSpans, listTokens);
+		processingList(listNE, otherTokens, listObjects, listSpans, listTokens);
 	}
 
-	private static void processingList(List<Pair<String, String>> listNE, List<String> listObjects,
-			List<String> listSpans, List<String> listTokens) {
+	private static void processingList(List<Pair<String, String>> listNE, List<Pair<String, String>> otherTokens,
+			List<String> listObjects, List<String> listSpans, List<String> listTokens) {
 		Map<Integer, String> mapTokens = getFileTokens(listTokens);
 		Map<Integer, List<Integer>> mapSpans = getFileSpans(listSpans);
 		List<Pair<List<Integer>, String>> listNEs = getNEs(listObjects);
+		List<Integer> usedTokens = new ArrayList<Integer>();
 		for (Pair<List<Integer>, String> pairNE : listNEs) {
-			String ne = getNETokens(pairNE.getLeft(), mapSpans, mapTokens);
-
-			// String ne = str.substring(str.indexOf("#") + 2);
+			String ne = getNETokens(pairNE.getLeft(), mapSpans, mapTokens, usedTokens);
 
 			String type = pairNE.getRight();
 			if (type.equals("LocOrg")) {
@@ -91,6 +93,12 @@ public class DialogNE {
 			} else {
 				addToList(listNE, ne, type);
 			}
+		}
+		for (Map.Entry<Integer, String> entry : mapTokens.entrySet())
+		{
+		    if(!usedTokens.contains(entry.getKey())) {
+		    	otherTokens.add(new MutablePair(entry.getValue(), "Other"));
+		    }
 		}
 	}
 
@@ -138,8 +146,8 @@ public class DialogNE {
 										list.stream().map(Object::toString).collect(Collectors.joining(",")),
 										spansInd.stream().map(Object::toString).collect(Collectors.joining(",")));
 							}
-							i+=listNE.size();
-						} else if(i == listNE.size()-1) {
+							i += listNE.size();
+						} else if (i == listNE.size() - 1) {
 							containsAll = true;
 							listNE.add(new MutablePair<List<Integer>, String>(spansInd, type));
 							i++;
@@ -187,7 +195,7 @@ public class DialogNE {
 	}
 
 	private static String getNETokens(List<Integer> spansIndNE, Map<Integer, List<Integer>> mapSpans,
-			Map<Integer, String> tokens) {
+			Map<Integer, String> tokens, List<Integer> usedTokens) {
 		// String spansIndexNE = str.substring(str.indexOf(" ", str.indexOf(" ") + 1) +
 		// 1, str.indexOf("#") - 1);
 		// String spansIndNE[] = spansIndexNE.split(" ");
@@ -201,7 +209,8 @@ public class DialogNE {
 				}
 			}
 		}
-
+		usedTokens.addAll(tokensNE);
+		
 		return getNE(tokens, tokensNE);
 	}
 

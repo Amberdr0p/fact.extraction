@@ -21,6 +21,30 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class ProcessingFile {
 
+	public static void writeToFile(String path, List<String> list) {
+		Writer writer = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, false), "utf-8"));
+			for (String line : list) {
+				writer.write(line + "\n");
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public static void writeToFile(String path, Map<Pair<String, String>, Integer> map) {
 		Writer writer = null;
 		try {
