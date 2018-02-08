@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import fact.extraction.dictionary.DialogNE;
 import utils.ProcessingFile;
+import utils.Sentence;
 
 public class Test1 {
 
